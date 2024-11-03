@@ -1,5 +1,7 @@
 package com.qyling.qRPC_simple.server;
 
+import com.qyling.qRPC_simple.config.ConfigUtils;
+import com.qyling.qRPC_simple.config.RpcConfig;
 import io.vertx.core.Vertx;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,12 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 public class VertxWebServer implements HttpServer {
     @Override
     public void doStart() {
+        RpcConfig rpcConfig = ConfigUtils.getConfig();
         // 创建vertx http服务器
         Vertx.vertx().createHttpServer()
                 .requestHandler(new RpcHttpRequestHandler())
-                .listen(8200, result -> {
+                .listen(rpcConfig.getPort(), result -> {
                     if (result.succeeded()) {
-                        log.info("Server is now listening on port 8200");
+                        log.info("Server is now listening on port {}", rpcConfig.getPort());
                     } else {
                         log.error("Failed to bind server: " + result.cause());
                     }

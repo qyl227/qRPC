@@ -12,5 +12,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Data
 public class User implements Serializable {
+    private Long id;
     private String username;
 }

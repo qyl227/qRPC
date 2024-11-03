@@ -8,4 +8,5 @@ import com.qyling.example_common.model.User;
  */
 public interface UserService {
     String sayHello(User user);
+    User getUser(Long id);
 }

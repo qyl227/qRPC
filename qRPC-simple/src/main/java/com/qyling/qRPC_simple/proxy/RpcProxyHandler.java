@@ -3,6 +3,8 @@ package com.qyling.qRPC_simple.proxy;
 import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import com.qyling.qRPC_simple.config.ConfigUtils;
+import com.qyling.qRPC_simple.config.RpcConfig;
 import com.qyling.qRPC_simple.model.RpcRequest;
 import com.qyling.qRPC_simple.model.RpcResponse;
 import com.qyling.qRPC_simple.serialize.RpcSerializer;
@@ -35,7 +37,8 @@ public class RpcProxyHandler implements InvocationHandler {
                 .args(args)
                 .build();
 
-        HttpResponse response = HttpRequest.post("localhost:8200")
+        RpcConfig rpcConfig = ConfigUtils.getConfig();
+        HttpResponse response = HttpRequest.post(rpcConfig.getUrl())
                 .body(RpcSerializer.serialize(rpcRequest))
                 .execute();
         RpcResponse rpcResponse = RpcSerializer.deserialize(response.bodyBytes());

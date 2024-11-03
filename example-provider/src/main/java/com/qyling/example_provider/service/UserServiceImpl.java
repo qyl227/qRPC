@@ -15,4 +15,9 @@ public class UserServiceImpl implements UserService {
         if (user != null) log.info("hello from {}", user.getUsername());
         return "hello from qRPC";
     }
+
+    @Override
+    public User getUser(Long id) {
+        return new User(id, "Lost");
+    }
 }

@@ -2,9 +2,8 @@ package com.qyling.example_provider;
 
 import com.qyling.example_common.service.UserService;
 import com.qyling.example_provider.service.UserServiceImpl;
+import com.qyling.qRPC_simple.init.RpcProviderInit;
 import com.qyling.qRPC_simple.register.LocalRegistry;
-import com.qyling.qRPC_simple.server.HttpServer;
-import com.qyling.qRPC_simple.server.VertxWebServer;
 
 /**
  * @author qyling
@@ -13,7 +12,6 @@ import com.qyling.qRPC_simple.server.VertxWebServer;
 public class provider {
     public static void main(String[] args) {
         LocalRegistry.register(UserService.class, UserServiceImpl.class);
-        HttpServer httpServer = new VertxWebServer();
-        httpServer.doStart();
+        RpcProviderInit.init();
     }
 }
