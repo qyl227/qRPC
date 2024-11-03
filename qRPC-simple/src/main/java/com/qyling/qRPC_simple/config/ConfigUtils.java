@@ -2,7 +2,6 @@ package com.qyling.qRPC_simple.config;
 
 import cn.hutool.setting.dialect.Props;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
