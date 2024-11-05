@@ -12,7 +12,7 @@ import java.io.ByteArrayOutputStream;
  * @author qyling
  * @date 2024/11/5 8:50
  */
-public class KryoSerializer implements Serializer{
+public class KryoSerializer implements Serializer {
     /**
      * kryo 线程不安全，使用 ThreadLocal 保证每个线程只有一个 Kryo
      */
@@ -24,6 +24,7 @@ public class KryoSerializer implements Serializer{
     });
     @Override
     public byte[] serialize(Object object) {
+        System.out.println("kryo 序列化器已开始序列化");
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Output output = new Output(byteArrayOutputStream);
         KRYO_THREAD_LOCAL.get().writeObject(output, object);

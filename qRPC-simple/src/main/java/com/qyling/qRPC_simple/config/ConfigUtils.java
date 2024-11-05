@@ -14,18 +14,6 @@ public class ConfigUtils {
     private static RpcConfig rpcConfig;
 
     /**
-     * 读取配置信息，默认读取 类路径下的 config.properties 和 rpc. 前缀
-     * @return
-     */
-    public static RpcConfig loadConfig() {
-        return loadConfig(RpcConfigConstant.DEFAULT_CONFIG_PATH);
-    }
-
-    public static RpcConfig loadConfig(String path) {
-        return loadConfig(path, RpcConfigConstant.DEFAULT_CONFIG_PREFIX);
-    }
-
-    /**
      *
      * @param path 配置文件路径
      * @param prefix 读取的配置前缀
@@ -49,8 +37,15 @@ public class ConfigUtils {
     }
 
     public static RpcConfig getConfig() {
+        return getConfig(RpcConfigConstant.DEFAULT_CONFIG_PATH);
+    }
+
+    public static RpcConfig getConfig(String path) {
+        return getConfig(path, RpcConfigConstant.DEFAULT_CONFIG_PREFIX);
+    }
+    public static RpcConfig getConfig(String path, String prefix) {
         if (rpcConfig == null) {
-            throw new IllegalStateException("请先加载配置");
+            return loadConfig(path, prefix);
         }
         return rpcConfig;
     }

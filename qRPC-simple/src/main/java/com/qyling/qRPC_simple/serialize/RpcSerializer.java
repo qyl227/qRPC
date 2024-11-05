@@ -1,13 +1,18 @@
 package com.qyling.qRPC_simple.serialize;
 
+import com.qyling.qRPC_simple.config.ConfigUtils;
+
 /**
  * RPC的序列化器
  * @author qyling
  * @date 2024/10/31 7:31
  */
 public class RpcSerializer {
-    // TODO 动态加载类加载器
-    private static Serializer serializer = new HessianSerializer();
+    /**
+     * 根据配置加载类加载器，默认为JDK类加载器
+     */
+    private static Serializer serializer = ConfigUtils.getConfig().getSerializerObj();
+
 
     /**
      * 序列化对象为byte[]
@@ -15,6 +20,9 @@ public class RpcSerializer {
      * @return
      */
     public static byte[] serialize(Object object) {
+        if (serializer == null) {
+            throw new IllegalStateException("序列化器未指定");
+        }
         return serializer.serialize(object);
     }
 
@@ -25,7 +33,10 @@ public class RpcSerializer {
      * @return
      * @param <T>
      */
-    public static <T> T deserialize(byte[] bytes, Class<T> clazz){
+    public static  <T> T deserialize(byte[] bytes, Class<T> clazz){
+        if (serializer == null) {
+            throw new IllegalStateException("序列化器未指定");
+        }
         return serializer.deserialize(bytes, clazz);
     }
 }
