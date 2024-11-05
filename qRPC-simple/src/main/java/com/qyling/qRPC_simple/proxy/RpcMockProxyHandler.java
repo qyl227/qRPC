@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 /**
+ * Mock模式代理调用handler
  * @author qyling
  * @date 2024/11/3 17:50
  */
@@ -14,6 +15,11 @@ public class RpcMockProxyHandler implements InvocationHandler {
         return getDefaultReturn(returnType);
     }
 
+    /**
+     * 返回类型默认值
+     * @param returnType
+     * @return
+     */
     private Object getDefaultReturn(Class<?> returnType) {
         if (returnType == Byte.class || returnType == Integer.class) {
             return 0;

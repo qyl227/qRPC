@@ -9,7 +9,7 @@ import com.qyling.qRPC_simple.serialize.RpcSerializer;
 public class SomeTests {
     public static void main(String[] args) {
         byte[] bytes = RpcSerializer.serialize(new String("324"));
-        Object obj = RpcSerializer.deserialize(bytes);
+        Object obj = RpcSerializer.deserialize(bytes, Object.class);
         System.out.println("obj = " + obj);
     }
 }

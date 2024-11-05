@@ -1,62 +1,31 @@
 package com.qyling.qRPC_simple.serialize;
 
-import java.io.*;
-
 /**
- * 原生JDK实现的序列化器
+ * RPC的序列化器
  * @author qyling
  * @date 2024/10/31 7:31
  */
 public class RpcSerializer {
+    // TODO 动态加载类加载器
+    private static Serializer serializer = new HessianSerializer();
+
     /**
      * 序列化对象为byte[]
      * @param object
      * @return
      */
     public static byte[] serialize(Object object) {
-        // 序列化到字节数组
-        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-        ObjectOutputStream out = null;
-        try {
-            out = new ObjectOutputStream(byteOut);
-            out.writeObject(object);
-            out.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (out != null) out.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return byteOut.toByteArray();
+        return serializer.serialize(object);
     }
 
     /**
      * 序列化byte[]为对象
      * @param bytes
+     * @param clazz 目标对象类型
      * @return
      * @param <T>
      */
-    public static <T> T deserialize(byte[] bytes){
-        ByteArrayInputStream byteIn = new ByteArrayInputStream(bytes);
-        ObjectInputStream in = null;
-        Object object = null;
-        try {
-            in = new ObjectInputStream(byteIn);
-            object = in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        return (T) object;
+    public static <T> T deserialize(byte[] bytes, Class<T> clazz){
+        return serializer.deserialize(bytes, clazz);
     }
 }

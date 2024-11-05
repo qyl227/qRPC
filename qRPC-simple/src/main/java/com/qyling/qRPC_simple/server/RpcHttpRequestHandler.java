@@ -24,7 +24,7 @@ public class RpcHttpRequestHandler implements Handler<HttpServerRequest> {
         RpcResponse rpcResponse = new RpcResponse();
         // 异步调用
         request.bodyHandler(body -> {
-            RpcRequest rpcRequest = RpcSerializer.deserialize(body.getBytes());
+            RpcRequest rpcRequest = RpcSerializer.deserialize(body.getBytes(), RpcRequest.class);
             String clazzName = rpcRequest.getClazzName();
             String methodName = rpcRequest.getMethodName();
             Class<?>[] parameterTypes = rpcRequest.getParameterTypes();
@@ -32,6 +32,7 @@ public class RpcHttpRequestHandler implements Handler<HttpServerRequest> {
 
             try {
                 Class<?> interfaceClazz = Class.forName(clazzName);
+                // 获取实现类
                 Class<?> clazz = LocalRegistry.get(interfaceClazz);
                 // 反射调用
                 Method method = clazz.getMethod(methodName, parameterTypes);

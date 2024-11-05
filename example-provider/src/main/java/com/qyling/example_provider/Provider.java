@@ -9,7 +9,7 @@ import com.qyling.qRPC_simple.register.LocalRegistry;
  * @author qyling
  * @date 2024/11/2 8:57
  */
-public class provider {
+public class Provider {
     public static void main(String[] args) {
         LocalRegistry.register(UserService.class, UserServiceImpl.class);
         RpcProviderInit.init();

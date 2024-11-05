@@ -38,6 +38,12 @@ public class ProxyFactory {
         }
     }
 
+    /**
+     * Mock模式
+     * @param interfaceClass
+     * @return
+     * @param <T>
+     */
     private static <T> T getMockProxy(Class<T> interfaceClass) {
         log.info("现在处于Mock模式，将返回默认数据");
         try {

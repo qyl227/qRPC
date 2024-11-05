@@ -41,7 +41,7 @@ public class RpcProxyHandler implements InvocationHandler {
         HttpResponse response = HttpRequest.post(rpcConfig.getUrl())
                 .body(RpcSerializer.serialize(rpcRequest))
                 .execute();
-        RpcResponse rpcResponse = RpcSerializer.deserialize(response.bodyBytes());
+        RpcResponse rpcResponse = RpcSerializer.deserialize(response.bodyBytes(), RpcResponse.class);
         if (!response.isOk()) {
             throw new HttpException(rpcResponse.getErrMsg()); //
         }
