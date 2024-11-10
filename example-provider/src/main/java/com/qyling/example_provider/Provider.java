@@ -2,7 +2,7 @@ package com.qyling.example_provider;
 
 import com.qyling.example_common.service.UserService;
 import com.qyling.example_provider.service.UserServiceImpl;
-import com.qyling.qRPC_simple.init.RpcProviderInit;
+import com.qyling.qRPC_simple.init.RpcProviderApplication;
 import com.qyling.qRPC_simple.register.LocalRegistry;
 
 /**
@@ -12,6 +12,6 @@ import com.qyling.qRPC_simple.register.LocalRegistry;
 public class Provider {
     public static void main(String[] args) {
         LocalRegistry.register(UserService.class, UserServiceImpl.class);
-        RpcProviderInit.init();
+        RpcProviderApplication.run();
     }
 }

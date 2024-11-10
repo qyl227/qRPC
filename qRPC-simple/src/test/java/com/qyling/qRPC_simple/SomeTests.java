@@ -1,15 +1,13 @@
 package com.qyling.qRPC_simple;
 
-import com.qyling.qRPC_simple.serialize.RpcSerializer;
+import com.qyling.qRPC_simple.config.RpcConstant;
 
 /**
  * @author qyling
- * @date 2024/10/31 7:34
+ * @date 2024/11/9 12:28
  */
 public class SomeTests {
     public static void main(String[] args) {
-        byte[] bytes = RpcSerializer.serialize(new String("324"));
-        Object obj = RpcSerializer.deserialize(bytes, Object.class);
-        System.out.println("obj = " + obj);
+        System.out.println(RpcConstant.MAGIC);
     }
 }

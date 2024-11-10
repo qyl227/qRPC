@@ -5,9 +5,14 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.qyling.qRPC_simple.config.ConfigUtils;
 import com.qyling.qRPC_simple.config.RpcConfig;
+import com.qyling.qRPC_simple.exception.QRPCException;
 import com.qyling.qRPC_simple.model.RpcRequest;
 import com.qyling.qRPC_simple.model.RpcResponse;
+import com.qyling.qRPC_simple.protocol.Message;
+import com.qyling.qRPC_simple.protocol.MessageTypeEnum;
 import com.qyling.qRPC_simple.serialize.RpcSerializer;
+import com.qyling.qRPC_simple.serialize.SerializerUtils;
+import com.qyling.qRPC_simple.server.TcpClient;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -24,7 +29,6 @@ import java.util.stream.Stream;
 public class RpcProxyHandler implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
-        // TODO 注册中心获取 ip:port
         // 获取参数类型
         Class<?>[] parameterTypes = Stream.of(args)
                 .map(Object::getClass)
@@ -36,14 +40,23 @@ public class RpcProxyHandler implements InvocationHandler {
                 .parameterTypes(parameterTypes)
                 .args(args)
                 .build();
-
         RpcConfig rpcConfig = ConfigUtils.getConfig();
-        HttpResponse response = HttpRequest.post(rpcConfig.getUrl())
-                .body(RpcSerializer.serialize(rpcRequest))
-                .execute();
-        RpcResponse rpcResponse = RpcSerializer.deserialize(response.bodyBytes(), RpcResponse.class);
-        if (!response.isOk()) {
-            throw new HttpException(rpcResponse.getErrMsg()); //
+        // 发送TCP请求
+        Message message = null;
+        try {
+            message = TcpClient.sendRequest(rpcRequest);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        if (message == null) {
+            throw new RuntimeException("消息为空");
+        }
+        if (message.getType() != MessageTypeEnum.RESPONSE.getType()) {
+            throw new QRPCException("非qRPC响应");
+        }
+        RpcResponse rpcResponse = RpcSerializer.deserialize(message.getBody(), RpcResponse.class);
+        if (!message.isOk()) {
+            throw new QRPCException(rpcResponse.getErrMsg());
         }
         return rpcResponse.getResult();
     }

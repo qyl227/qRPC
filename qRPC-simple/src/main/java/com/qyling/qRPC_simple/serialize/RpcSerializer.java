@@ -1,6 +1,9 @@
 package com.qyling.qRPC_simple.serialize;
 
 import com.qyling.qRPC_simple.config.ConfigUtils;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * RPC的序列化器
@@ -11,7 +14,9 @@ public class RpcSerializer {
     /**
      * 根据配置加载类加载器，默认为JDK类加载器
      */
-    private static Serializer serializer = ConfigUtils.getConfig().getSerializerObj();
+    @Getter
+    @Setter
+    private static Serializer serializer;
 
 
     /**

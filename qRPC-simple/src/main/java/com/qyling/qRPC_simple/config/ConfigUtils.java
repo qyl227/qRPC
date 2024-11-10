@@ -37,11 +37,11 @@ public class ConfigUtils {
     }
 
     public static RpcConfig getConfig() {
-        return getConfig(RpcConfigConstant.DEFAULT_CONFIG_PATH);
+        return getConfig(RpcConstant.DEFAULT_CONFIG_PATH);
     }
 
     public static RpcConfig getConfig(String path) {
-        return getConfig(path, RpcConfigConstant.DEFAULT_CONFIG_PREFIX);
+        return getConfig(path, RpcConstant.DEFAULT_CONFIG_PREFIX);
     }
     public static RpcConfig getConfig(String path, String prefix) {
         if (rpcConfig == null) {

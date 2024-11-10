@@ -1,7 +1,6 @@
 package com.qyling.qRPC_simple.config;
 
-import com.qyling.qRPC_simple.serialize.JDKSerializer;
-import com.qyling.qRPC_simple.serialize.Serializer;
+import com.qyling.qRPC_simple.serialize.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,11 +16,12 @@ import java.util.Arrays;
 @Data
 @Slf4j
 public class RpcConfig {
-    private String host = "localhost";
-    private Integer port = 8200;
+    private String host = RpcConstant.DEFAULT_HOST;
+    private Integer port = RpcConstant.DEFAULT_PORT;
     private Boolean mock = false;
     private String serializer = "com.qyling.qRPC_simple.serialize.JDKSerializer";
     private Serializer serializerObj = null;
+    private Byte serializationID = null;
 
     public String getUrl() {
         return host + ":" + port;
@@ -50,10 +50,8 @@ public class RpcConfig {
                     } catch (ClassNotFoundException e) {
                         log.error("未找到序列化器：{}", serializer);
                         throw new RuntimeException(e);
-                    } catch (NoSuchMethodException e) {
-                        log.error("序列化器初始化失败");
-                        throw new RuntimeException(e);
-                    } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
+                    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
+                             InstantiationException e) {
                         log.error("序列化器初始化失败");
                         throw new RuntimeException(e);
                     }
@@ -61,5 +59,27 @@ public class RpcConfig {
             }
         }
         return serializerObj;
+    }
+
+    public Byte getSerializationID() {
+        if (serializationID == null) {
+            synchronized (this) {
+                if (serializationID == null) {
+                    Class<? extends Serializer> clazz = getSerializerObj().getClass();
+                    if (clazz == JDKSerializer.class) {
+                        serializationID =  SerializationEnum.JDK.getSerializationID();
+                    } else if (clazz == HessianSerializer.class) {
+                        serializationID =  SerializationEnum.HESSIAN.getSerializationID();
+                    } else if (clazz == KryoSerializer.class) {
+                        serializationID =  SerializationEnum.KRYO.getSerializationID();
+                    } else if (clazz == JSONSerializer.class) {
+                        serializationID =  SerializationEnum.JSON.getSerializationID();
+                    } else {
+                        serializationID =  SerializationEnum.OTHER.getSerializationID();
+                    }
+                }
+            }
+        }
+        return serializationID;
     }
 }

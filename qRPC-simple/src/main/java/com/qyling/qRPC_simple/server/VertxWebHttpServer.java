@@ -2,7 +2,6 @@ package com.qyling.qRPC_simple.server;
 
 import com.qyling.qRPC_simple.config.ConfigUtils;
 import com.qyling.qRPC_simple.config.RpcConfig;
-import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2024/10/31 8:05
  */
 @Slf4j
-public class VertxWebServer implements HttpServer {
+public class VertxWebHttpServer implements HttpServer {
     @Override
     public void doStart() {
         RpcConfig rpcConfig = ConfigUtils.getConfig();
