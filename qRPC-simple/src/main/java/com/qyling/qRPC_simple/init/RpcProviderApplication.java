@@ -2,6 +2,7 @@ package com.qyling.qRPC_simple.init;
 
 import com.qyling.qRPC_simple.server.Server;
 import com.qyling.qRPC_simple.server.TcpServer;
+import com.qyling.qRPC_simple.server.VertxWebHttpServer;
 
 /**
  * RPC提供者初始化类
@@ -19,7 +20,7 @@ public class RpcProviderApplication {
 //        httpServer.doStart();
 
         // TCP服务器（自定义协议）
-        Server tcpServer = new TcpServer();
-        tcpServer.doStart();
+        Server server = new TcpServer(); //
+        server.doStart();
     }
 }

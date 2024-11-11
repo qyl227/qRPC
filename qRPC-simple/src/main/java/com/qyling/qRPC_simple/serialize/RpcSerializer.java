@@ -1,7 +1,5 @@
 package com.qyling.qRPC_simple.serialize;
 
-import com.qyling.qRPC_simple.config.ConfigUtils;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

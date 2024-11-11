@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 /**
  * 自定义协议请求处理器
@@ -34,7 +33,7 @@ public class RpcTcpRequestHandler implements Handler<NetSocket> {
             // 构造消息对象
             Message message = Message.builder()
                     .magic(RpcConstant.MAGIC)
-                    .version(RpcConstant.version)
+                    .version(RpcConstant.VERSION)
                     .type(MessageTypeEnum.RESPONSE.getType())
                     .status(MessageHandleStatusEnum.RUNNING.getStatus())
                     .build();
@@ -52,15 +51,13 @@ public class RpcTcpRequestHandler implements Handler<NetSocket> {
                     throw new CheckFailedException("消息非qRPC传输协议，请重新检查");
                 }
                 byte version = requestMessage.getVersion();
-                if (version != RpcConstant.version) {
-                    throw new CheckFailedException("qRPC客户端版本：" + version + " 与服务端版本：" + RpcConstant.version + " 不匹配");
+                if (version != RpcConstant.VERSION) {
+                    throw new CheckFailedException("qRPC客户端版本：" + version + " 与服务端版本：" + RpcConstant.VERSION + " 不匹配");
                 }
                 byte type = requestMessage.getType();
                 if (type != MessageTypeEnum.REQUEST.getType()) {
                     throw new CheckFailedException("非qRPC请求");
                 }
-                byte status = requestMessage.getStatus();
-                int length = requestMessage.getLength();
                 byte[] body = requestMessage.getBody();
 
                 RpcSerializer.setSerializer(SerializerUtils.getSerializer(serializationID));

@@ -4,7 +4,6 @@ import com.qyling.qRPC_simple.config.ConfigUtils;
 import com.qyling.qRPC_simple.config.RpcConfig;
 import com.qyling.qRPC_simple.config.RpcConstant;
 import com.qyling.qRPC_simple.model.RpcRequest;
-import com.qyling.qRPC_simple.model.RpcResponse;
 import com.qyling.qRPC_simple.protocol.Message;
 import com.qyling.qRPC_simple.protocol.MessageHandleStatusEnum;
 import com.qyling.qRPC_simple.protocol.MessageTypeEnum;
@@ -17,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * TCP客户端
@@ -25,21 +26,25 @@ import java.util.concurrent.CompletableFuture;
  */
 @Slf4j
 public class TcpClient {
+//    private static AtomicInteger i = new AtomicInteger(1);
     /**
      * 发起请求
      * @param rpcRequest
      * @return
      * @throws Exception
      */
-    public static Message sendRequest(RpcRequest rpcRequest) throws Exception {
+    public static Message sendRequest(RpcRequest rpcRequest){
+//        if (i.getAndIncrement() <= 2) {
+//            throw new RuntimeException();
+//        }
         // 创建一个 CompletableFuture 来等待响应
         CompletableFuture<Message> future = new CompletableFuture<>();
 
-        // 创建一个 Vert.x 实例
+        // Vert.x 实例
         Vertx vertx = Vertx.vertx();
         RpcConfig rpcConfig = ConfigUtils.getConfig();
 
-        // 创建一个 TCP 客户端
+        // TCP 客户端
         NetClient client = vertx.createNetClient();
 
         // 连接到服务器
@@ -55,7 +60,7 @@ public class TcpClient {
                         .requestID(UUID.randomUUID().getLeastSignificantBits())
                         .magic(RpcConstant.MAGIC)
 //                        .magic((byte) 1)
-                        .version(RpcConstant.version)
+                        .version(RpcConstant.VERSION)
 //                        .version((byte) 2)
                         .type(MessageTypeEnum.REQUEST.getType())
                         .serializationID(rpcConfig.getSerializationID())
@@ -84,6 +89,12 @@ public class TcpClient {
         });
 
         // 阻塞直到收到响应
-        return future.get();
+        try {
+            return future.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

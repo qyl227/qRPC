@@ -10,6 +10,7 @@ import com.qyling.qRPC_simple.model.RpcRequest;
 import com.qyling.qRPC_simple.model.RpcResponse;
 import com.qyling.qRPC_simple.protocol.Message;
 import com.qyling.qRPC_simple.protocol.MessageTypeEnum;
+import com.qyling.qRPC_simple.retry.RetryStrategy;
 import com.qyling.qRPC_simple.serialize.RpcSerializer;
 import com.qyling.qRPC_simple.serialize.SerializerUtils;
 import com.qyling.qRPC_simple.server.TcpClient;
@@ -44,7 +45,8 @@ public class RpcProxyHandler implements InvocationHandler {
         // 发送TCP请求
         Message message = null;
         try {
-            message = TcpClient.sendRequest(rpcRequest);
+            RetryStrategy retryStrategy = rpcConfig.getRetryStrategyObj();
+            message = retryStrategy.doTask(() -> TcpClient.sendRequest(rpcRequest));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

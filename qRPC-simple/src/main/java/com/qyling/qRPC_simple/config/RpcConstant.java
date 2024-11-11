@@ -18,7 +18,7 @@ public interface RpcConstant {
     /**
      * qRPC服务端当前版本
      */
-    Byte version = 1;
+    Byte VERSION = 1;
     /**
      * qRPC默认序列化器
      */
