@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>com.qyling</groupId>
-            <artifactId>qRPC-simple</artifactId>
+            <artifactId>qRPC-core</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>

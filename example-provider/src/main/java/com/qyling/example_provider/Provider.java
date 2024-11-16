@@ -2,8 +2,8 @@ package com.qyling.example_provider;
 
 import com.qyling.example_common.service.UserService;
 import com.qyling.example_provider.service.UserServiceImpl;
-import com.qyling.qRPC_simple.init.RpcProviderApplication;
-import com.qyling.qRPC_simple.register.LocalRegistry;
+import com.qyling.qRPC.init.RpcProviderApplication;
+import com.qyling.qRPC.register.LocalRegistry;
 
 /**
  * @author qyling

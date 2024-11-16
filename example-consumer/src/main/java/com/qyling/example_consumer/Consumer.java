@@ -2,7 +2,7 @@ package com.qyling.example_consumer;
 
 import com.qyling.example_common.model.User;
 import com.qyling.example_common.service.UserService;
-import com.qyling.qRPC_simple.proxy.ProxyFactory;
+import com.qyling.qRPC.proxy.ProxyFactory;
 
 /**
  * @author qyling
